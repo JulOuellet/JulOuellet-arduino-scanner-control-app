@@ -15,6 +15,9 @@ pip install requirements.txt
 > `cannot be loaded because running scripts is disabled on this system` 
 > error while trying to run the script. 
 > In order to fix this issue, open a powershell terminal as administrator and enter the following command:
-> `Set-ExecutionPolicy RemoteSigned`.
+> ```angular2html
+> Set-ExecutionPolicy RemoteSigned.
+>```
+Set-ExecutionPolicy RemoteSigned.
 
 **4. Run the program.**
