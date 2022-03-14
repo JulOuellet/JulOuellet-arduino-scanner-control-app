@@ -1,7 +1,7 @@
 #README
 
 ## Steps to run the app on your end :
-###1. Download the files;
+**1. Download the files;**
 
 ###2. Open a new terminal;
 
