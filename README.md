@@ -3,9 +3,9 @@
 ## Steps to run the app on your end :
 **1. Download the files;**
 
-###2. Open a new terminal;
+**2. Open a new terminal;**
 
-###3. Run the following commands in order :
+**3. Run the following commands in order :**
 ```angular2html
 python -m venv env
 venv\scripts\activate
@@ -17,4 +17,4 @@ pip install requirements.txt
 > In order to fix this issue, open a powershell terminal as administrator and enter the following command:
 > `Set-ExecutionPolicy RemoteSigned`.
 
-###4. Run the program.
+**4. Run the program.**
