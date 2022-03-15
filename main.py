@@ -14,9 +14,9 @@ class ArduinoControl(QWidget):
         btn_quit = QPushButton('Quitter', self)
         btn_quit.clicked.connect(QApplication.instance().quit)
         btn_quit.resize(btn_quit.sizeHint())
-        btn_quit.move(90, 100)
+        btn_quit.move(100, 100)
 
-        self.setGeometry(100, 100, 200, 150)
+        self.setGeometry(1280, 720, 1280, 720)
         self.setWindowTitle('Arduino Control Panel')
         self.show()
 
