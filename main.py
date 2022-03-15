@@ -24,7 +24,6 @@ class MainWindow(QWidget):
         btn_quit.resize(btn_quit.sizeHint())
         btn_quit.move(100, 100)
 
-
         # Define window settings
         self.setGeometry(1280, 720, 1280, 720)
         self.setWindowTitle('Arduino Control Panel')
