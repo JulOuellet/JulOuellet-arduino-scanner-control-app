@@ -38,7 +38,7 @@ class MainApp(QWidget):
         # Setup buttons and input text box
         self.upc_input = QLineEdit()
         self.upc_input.setPlaceholderText("Entrer un numéro UPC")
-        self.add_product = QPushButton("Ajouter un produit à la liste")
+        self.add_product = QPushButton("Ajouter manuellement un produit à la liste")
         self.delete_lines = QPushButton("Effacer les produits sélectionnés")
         self.clear_list = QPushButton("Effacer tous les produits de la liste")
 
@@ -84,7 +84,6 @@ class MainApp(QWidget):
 
     def removeProducts(self):
         self.productsList_model.removeLine(self.productsList_table.selectedIndexes())
-        self.productsList_model.clearSelection()
 
     def updateTotalPrice(self):
         self.total_price.setText(self.productsList_model.getTotalPrice())
