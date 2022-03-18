@@ -4,7 +4,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 
-codeDeTest = "074312840708"
+codeDeTest = "074312842306"
 
 
 class MainWindow(QMainWindow):
