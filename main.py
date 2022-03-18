@@ -1,68 +1,109 @@
-import serial
-from PySide6.QtWidgets import *
-from PySide6.QtGui import QCloseEvent
+import product_list
 import sys
-import csv
+from PySide6.QtWidgets import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
+
+codeDeTest = "715067004297"
 
 
-class MainWindow(QWidget):
-
+class MainWindow(QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.setup()
+        QMainWindow.__init__(self)
 
-    def setup(self):
-
-        # Define upc to test button
-        btn_test_upc = QPushButton('Tester un code UPC', self)
-        btn_test_upc.clicked.connect(self.upcInputEvent)
-        btn_test_upc.move(100, 300)
-
-        # Define quit button
-        btn_quit = QPushButton('Quitter', self)
-        btn_quit.clicked.connect(QApplication.instance().quit)
-        btn_quit.resize(btn_quit.sizeHint())
-        btn_quit.move(100, 100)
-
-        # Define window settings
-        self.setGeometry(1280, 720, 1280, 720)
-        self.setWindowTitle('Arduino Control Panel')
-        self.show()
-
-    def upcInputEvent(self):
-        upc_num, result = QInputDialog.getText(self, 'Input Dialog', "Entrer le numéro UPC du produit à tester : ")
-        if result:
-            upc_num = int(upc_num)
-            return findProduct(upc_num)
-
-    def closeEvent(self, event: QCloseEvent):
-        reply = QMessageBox.question(self, 'Message', 'Are you sure you want to quit?',
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-
-        if reply == QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
+        self.mainWindow = MainWindow()
+        self.setCentralWidget(self.mainWindow)
 
 
-def findProduct(value):
-    with open(r'DB/upcPrice.txt', 'r') as file:
-        reader = csv.reader(file)
+class MainApp(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
 
-        for line in reader:
-            print("searching...")
-            if int(line[0]) == value:
-                upc_found = line
-                print(upc_found)
-                break
-    return upc_found
+        # Setup products tabel
+        self.productsList_model = product_list.ScannedProductTableModel()
+        self.productsList_table = QTableView()
+        self.productsList_table.setModel(self.productsList_model)
+        self.productsList_table.horizontalHeader().setStretchLastSection(True)
+        self.productsList_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.productsList_model.addProductToList(codeDeTest)
+
+        # Setup total price label and layout
+        self.total_price_layout = QFormLayout()
+        self.total_price = QLabel()
+        self.total_price_layout.addRow("Total: ", self.total_price)
+        self.total_price_layout.setFieldGrowthPolicy(QFormLayout.ExpandingFieldsGrow)
+        self.total_price_layout.setLabelAlignment(Qt.AlignRight)
+        self.updateTotalPrice()
+
+        # Setup buttons and input text box
+        self.upc_input = QLineEdit()
+        self.upc_input.setPlaceholderText("Entrer un numéro UPC")
+        self.add_product = QPushButton("Ajouter un produit à la liste")
+        self.delete_lines = QPushButton("Effacer les produits sélectionnés")
+        self.clear_list = QPushButton("Effacer tous les produits de la liste")
+
+        # Setup controls layout
+        self.controls_layout = QFormLayout()
+        self.controls_layout.addRow("Code UPC : ", self.upc_input)
+        self.controls_layout.addRow(self.add_product)
+        self.controls_layout.addRow(self.delete_lines)
+        self.controls_layout.addRow(self.clear_list)
+        self.controls_layout.setFieldGrowthPolicy(QFormLayout.FieldsStayAtSizeHint)
+
+        # Setup main layout for products list and total price
+        self.list_and_total_layout = QHBoxLayout()
+        # self.list_and_total_layout = QVBoxLayout()
+        self.list_and_total_layout.addWidget(self.productsList_table)
+        self.list_and_total_layout.addLayout(self.total_price_layout)
+
+        # Setup main layout for controls and product list
+        self.controls_and_list_layout = QVBoxLayout()
+        self.controls_and_list_layout.addLayout(self.controls_layout)
+        self.controls_and_list_layout.addLayout(self.list_and_total_layout)
+        self.controls_and_list_layout.setStretchFactor(self.list_and_total_layout, 1)
+        self.setLayout(self.controls_and_list_layout)
+        self.productsList_table.resizeColumnsToContents()
+
+        self.setActions()
+
+    def setActions(self):
+        self.add_product.clicked.connect(self.addProductToList)
+        self.clear_list.clicked.connect(self.clearProductsList)
+        self.productsList_model.layoutChanged.connect(self.updateTotalPrice)
+        self.delete_lines.clicked.connect(self.removeProducts)
+
+    def addProductToList(self):
+        upc = self.upc_input.text()
+
+        # Valider le format du code upc
+        if len(upc) != 12 or not upc.isdigit() or not self.productsList_model.addProductToList(upc):
+            popupMessage("Le code UPC entré n'est pas valide")
+
+    def clearProductsList(self):
+        self.productsList_model.clearProductsList()
+
+    def removeProducts(self):
+        self.productsList_model.removeLine(self.productsList_table.selectedIndexes())
+        self.productsList_model.clearSelection()
+
+    def updateTotalPrice(self):
+        self.total_price.setText(self.productsList_model.getTotalPrice())
 
 
-def run():
-    app = QApplication(sys.argv)
-    mainWindow = MainWindow()
-    app.exec()
+def popupMessage(msg: str):
+    msg_box = QMessageBox()
+    msg_box.setIcon(QMessageBox.Critical)
+    msg_box.setText(msg)
+    msg_box.setWindowTitle("Erreur")
+    msg_box.exec()
 
 
 if __name__ == '__main__':
-    run()
+    app = QApplication(sys.argv)
+
+    window = MainApp()
+    window.setWindowTitle('Arduino control app')
+    window.resize(750, 720)
+    window.show()
+
+    sys.exit(app.exec())
