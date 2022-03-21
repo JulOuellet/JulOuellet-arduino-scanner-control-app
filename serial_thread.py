@@ -17,7 +17,10 @@ class SerialReaderThread(threading.Thread):
     def run(self):
         global ser, datas
         while not self.stopped():
-            datas = ser.read()
+            # Avec Serial.println() :
+            datas = ser.readline()
+            # Avec Serial.write() :
+#            datas = ser.read()
             print(datas)
 
     def stop(self):

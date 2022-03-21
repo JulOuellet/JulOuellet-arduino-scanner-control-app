@@ -35,17 +35,32 @@ class MainApp(QWidget):
         self.total_price_layout.setLabelAlignment(Qt.AlignRight)
         self.updateTotalPrice()
 
-        # Setup buttons and input text box
+        # Setup input boxes and place holder text
         self.upc_input = QLineEdit()
         self.upc_input.setPlaceholderText("Entrer un numéro UPC")
-        self.add_product = QPushButton("Ajouter manuellement un produit à la liste")
+        self.upc_bin_input = QLineEdit()
+        self.upc_bin_input.setPlaceholderText("Entrer un code binaire")
+
+        # Setup buttons
+        self.add_product = QPushButton("Ajouter manuellement un produit à la liste (code UPC-A)")
+        self.add_bin_code = QPushButton("Ajouter manuellement un produit à la liste (code binaire)")
         self.delete_lines = QPushButton("Effacer les produits sélectionnés")
         self.clear_list = QPushButton("Effacer tous les produits de la liste")
 
+        # Setup user inputs layout
+        self.inputs_layout = QHBoxLayout()
+        self.inputs_layout.addWidget(self.upc_input)
+        self.inputs_layout.addWidget(self.upc_bin_input)
+
+        # Setup add buttons layout
+        self.add_buttons_layout = QHBoxLayout()
+        self.add_buttons_layout.addWidget(self.add_product)
+        self.add_buttons_layout.addWidget(self.add_bin_code)
+
         # Setup controls layout
         self.controls_layout = QFormLayout()
-        self.controls_layout.addRow("Code UPC : ", self.upc_input)
-        self.controls_layout.addRow(self.add_product)
+        self.controls_layout.addRow(self.inputs_layout)
+        self.controls_layout.addRow(self.add_buttons_layout)
         self.controls_layout.addRow(self.delete_lines)
         self.controls_layout.addRow(self.clear_list)
         self.controls_layout.setFieldGrowthPolicy(QFormLayout.FieldsStayAtSizeHint)
@@ -68,6 +83,7 @@ class MainApp(QWidget):
 
     def setActions(self):
         self.add_product.clicked.connect(self.addProductToList)
+        self.add_bin_code.clicked.connect(self.addProductFromBinaryCode)
         self.clear_list.clicked.connect(self.clearProductsList)
         self.productsList_model.layoutChanged.connect(self.updateTotalPrice)
         self.delete_lines.clicked.connect(self.removeProducts)
@@ -78,6 +94,9 @@ class MainApp(QWidget):
         # Valider le format du code upc
         if len(upc) != 12 or not upc.isdigit() or not self.productsList_model.addProductToList(upc):
             popupMessage("Le code UPC entré n'est pas valide")
+
+    def addProductFromBinaryCode(self):
+        pass
 
     def clearProductsList(self):
         self.productsList_model.clearProductsList()
