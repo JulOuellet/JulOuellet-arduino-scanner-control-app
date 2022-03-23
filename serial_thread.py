@@ -11,7 +11,10 @@ class SerialReaderThread(threading.Thread):
     # Get data from port
     def run(self):
         while not self.stopped():
-            print("Nouveau code détecté :\n Valeurs en tension = " + str(arduino.getScannedValues()))
+            print(
+                "Nouveau scan effectué! Valeurs numériques mesurées (plage 0 - 255) :\n"
+                + str(arduino.getScannedValues())
+            )
 
     def stop(self):
         self._stop_event.set()
