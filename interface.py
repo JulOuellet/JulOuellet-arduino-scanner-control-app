@@ -2,7 +2,7 @@ import product_list
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
-import barcode
+from playsound import playsound
 
 
 codeDeTest = "074312842306"
@@ -91,6 +91,7 @@ class MainApp(QWidget):
 
     def addProductToList(self):
         upc = self.upc_input.text()
+        playsound('audio/data_audio_confirm.wav')
 
         # Valider le format du code upc
         if len(upc) != 12 or not upc.isdigit() or not self.productsList_model.addProductToList(upc):
