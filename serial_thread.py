@@ -1,10 +1,5 @@
-import serial
-import time
 import threading
-
-
-ser = serial.Serial('COM4', 115200, timeout=1)
-datas = ""
+import arduino
 
 
 # Classe pour lire le port serial dans le background
@@ -15,13 +10,8 @@ class SerialReaderThread(threading.Thread):
 
     # Get data from port
     def run(self):
-        global ser, datas
         while not self.stopped():
-            # Avec Serial.println() :
-            datas = ser.readline()
-            # Avec Serial.write() :
-#            datas = ser.read()
-            print(datas)
+            print("Nouveau code détecté :\n Valeurs en tension = " + str(arduino.getScannedValues()))
 
     def stop(self):
         self._stop_event.set()
