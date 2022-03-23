@@ -39,24 +39,24 @@ class MainApp(QWidget):
         # Setup input boxes and place holder text
         self.upc_input = QLineEdit()
         self.upc_input.setPlaceholderText("Entrer un numéro UPC")
-        self.upc_bin_input = QLineEdit()
-        self.upc_bin_input.setPlaceholderText("Entrer un code binaire")
+#        self.upc_bin_input = QLineEdit()
+#        self.upc_bin_input.setPlaceholderText("Entrer un code binaire")
 
         # Setup buttons
         self.add_product = QPushButton("Ajouter manuellement un produit à la liste (code UPC-A)")
-        self.add_bin_code = QPushButton("Ajouter manuellement un produit à la liste (code binaire)")
+#        self.add_bin_code = QPushButton("Ajouter manuellement un produit à la liste (code binaire)")
         self.delete_lines = QPushButton("Effacer les produits sélectionnés")
         self.clear_list = QPushButton("Effacer tous les produits de la liste")
 
         # Setup user inputs layout
         self.inputs_layout = QHBoxLayout()
         self.inputs_layout.addWidget(self.upc_input)
-        self.inputs_layout.addWidget(self.upc_bin_input)
+#        self.inputs_layout.addWidget(self.upc_bin_input)
 
         # Setup add buttons layout
         self.add_buttons_layout = QHBoxLayout()
         self.add_buttons_layout.addWidget(self.add_product)
-        self.add_buttons_layout.addWidget(self.add_bin_code)
+#        self.add_buttons_layout.addWidget(self.add_bin_code)
 
         # Setup controls layout
         self.controls_layout = QFormLayout()
@@ -84,7 +84,7 @@ class MainApp(QWidget):
 
     def setActions(self):
         self.add_product.clicked.connect(self.addProductToList)
-        self.add_bin_code.clicked.connect(self.addProductFromBinaryCode)
+#        self.add_bin_code.clicked.connect(self.addProductFromBinaryCode)
         self.clear_list.clicked.connect(self.clearProductsList)
         self.productsList_model.layoutChanged.connect(self.updateTotalPrice)
         self.delete_lines.clicked.connect(self.removeProducts)
