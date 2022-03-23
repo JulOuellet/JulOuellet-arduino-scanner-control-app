@@ -2,7 +2,7 @@ import serial
 import struct
 
 port = None
-ser = serial.Serial('COM4', 115200, timeout=None)
+ser = serial.Serial('COM3', 115200, timeout=None)
 endScanFLag = b'\x02'
 
 
