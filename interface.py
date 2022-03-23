@@ -91,11 +91,12 @@ class MainApp(QWidget):
 
     def addProductToList(self):
         upc = self.upc_input.text()
-        playsound('audio/data_audio_confirm.wav')
 
         # Valider le format du code upc
         if len(upc) != 12 or not upc.isdigit() or not self.productsList_model.addProductToList(upc):
             popupMessage("Le code UPC entré n'est pas valide")
+        else:
+            playsound('audio/data_audio_confirm.wav')
 
     def addProductFromBinaryCode(self):
         pass
